@@ -1,0 +1,56 @@
+# Quartus 17.1 Project Settings File (QSF)
+# DE10-Lite – 10M50DAF484C7G  (Intel MAX 10)
+set_global_assignment -name FAMILY "MAX 10"
+set_global_assignment -name DEVICE 10M50DAF484C7G
+set_global_assignment -name TOP_LEVEL_ENTITY accel_top2
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name LAST_QUARTUS_VERSION "17.1.0 Lite Edition"
+
+# Source files
+set_global_assignment -name VERILOG_FILE src/accel_top2.v
+set_global_assignment -name VERILOG_FILE src/adxl345_spi.v
+set_global_assignment -name VERILOG_FILE src/uart_tx.v
+set_global_assignment -name VERILOG_FILE src/packet_sender.v
+
+# ---- Clock (50 MHz) ----
+set_location_assignment PIN_P11 -to clk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk
+
+# ---- Reset (KEY[0], active low) ----
+set_location_assignment PIN_B8 -to rst_n
+set_instance_assignment -name IO_STANDARD "3.3 V SCHMITT TRIGGER" -to rst_n
+
+# ---- Onboard ADXL345 G-Sensor SPI ----
+set_location_assignment PIN_AB15 -to spi_sclk
+set_location_assignment PIN_AB16 -to spi_cs_n
+set_location_assignment PIN_V11  -to spi_mosi
+set_location_assignment PIN_V12  -to spi_miso
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_sclk
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_cs_n
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_mosi
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to spi_miso
+
+# ---- UART TX to ESP32 (Arduino header IO[1] = PIN_AB6) ----
+set_location_assignment PIN_AB6 -to uart_tx
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_tx
+
+# ---- LEDs LEDR[9:0] ----
+set_location_assignment PIN_A8  -to led[0]
+set_location_assignment PIN_A9  -to led[1]
+set_location_assignment PIN_A10 -to led[2]
+set_location_assignment PIN_B10 -to led[3]
+set_location_assignment PIN_D13 -to led[4]
+set_location_assignment PIN_C13 -to led[5]
+set_location_assignment PIN_E14 -to led[6]
+set_location_assignment PIN_D14 -to led[7]
+set_location_assignment PIN_A11 -to led[8]
+set_location_assignment PIN_B11 -to led[9]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to led[*]
+
+# Compiler settings
+set_global_assignment -name OPTIMIZATION_TECHNIQUE SPEED
+set_global_assignment -name NUM_PARALLEL_PROCESSORS 4
